@@ -36,12 +36,12 @@ const Navbar = () => {
     }
     return (
         <div className='bg-white dark:bg-gray-900 dark:text-white shadow-md'>
-            <div className='flex items-center justify-between px-6 mx-auto max-w-7xl h-20'>
+            <div className='flex items-center justify-between px-4 md:px-6 mx-auto max-w-7xl h-20'>
                 <div>
-                    <h1 className='text-2xl font-bold'>Job<span className='text-[#6C5CE7]'>Hunt</span></h1>
+                    <h1 className='text-xl md:text-2xl font-bold'>Job<span className='text-[#6C5CE7]'>Hunt</span></h1>
                 </div>
 
-                
+                {/* Desktop Menu */}
                 <div className='hidden md:flex items-center justify-center flex-1 gap-8 ml-4'>
                     <ul className='flex font-[14px] items-center gap-5'>
                         {
@@ -62,7 +62,8 @@ const Navbar = () => {
                     </ul>
                 </div>
 
-                <div className='flex items-center gap-2 ml-auto'>
+                {/* Desktop Buttons */}
+                <div className='hidden md:flex items-center gap-2 ml-auto'>
                     <ModeToggle />
                     {
                         !user ? (
@@ -108,14 +109,14 @@ const Navbar = () => {
 
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu Toggle */}
                 <div className='md:hidden flex items-center gap-4'>
                     <ModeToggle />
-                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className='p-1'>
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
-                </div>
+            </div>
 
                 {/* Mobile Menu Dropdown */}
             {isMobileMenuOpen && (
@@ -126,7 +127,7 @@ const Navbar = () => {
                                 <>
                                     <li><Link to="/admin/companies" className={getLinkClass('/admin/companies')} onClick={() => setIsMobileMenuOpen(false)}>Companies</Link></li>
                                     <li><Link to="/admin/jobs" className={getLinkClass('/admin/jobs')} onClick={() => setIsMobileMenuOpen(false)}>Jobs</Link></li>
-                                    <li><Link to="/admin/resumeAnalyzer" className={getLinkClass('/admin/resumeAnalyzer')} onClick={() => setIsMobileMenuOpen(false)}>Resume Analyzer</Link></li>
+                                    <li><Link to="/resumeAnalyzer" className={getLinkClass('/resumeAnalyzer')} onClick={() => setIsMobileMenuOpen(false)}>Resume Analyzer</Link></li>
 
                                 </>
                             ) : (
