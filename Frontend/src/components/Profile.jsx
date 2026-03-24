@@ -17,26 +17,26 @@ const Profile = () => {
         <div className='bg-white dark:bg-gray-950 min-h-screen'>
             {/* Profile Header */}
             <div className='max-w-6xl mx-auto px-4 py-8'>
-                <div className='flex justify-between items-center mb-8'>
-                    <div className='flex items-center gap-6'>
-                        <Avatar className="h-20 w-20">
+                <div className='flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8'>
+                    <div className='flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6'>
+                        <Avatar className="h-16 sm:h-20 w-16 sm:w-20">
                             <AvatarImage src={user?.profile?.profilePhoto || "https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg"} alt="profile" />
                         </Avatar>
                         <div>
-                            <h1 className='text-2xl font-bold dark:text-white'>{user?.fullname}</h1>
-                            <div className='mt-2 space-y-1 dark:text-gray-400 text-sm'>
+                            <h1 className='text-xl sm:text-2xl font-bold dark:text-white'>{user?.fullname}</h1>
+                            <div className='mt-2 space-y-1 dark:text-gray-400 text-xs sm:text-sm'>
                                 <div className='flex items-center gap-2'>
-                                    <Mail size={16} />
-                                    <span>{user?.email}</span>
+                                    <Mail size={14} />
+                                    <span className='truncate'>{user?.email}</span>
                                 </div>
                                 <div className='flex items-center gap-2'>
-                                    <Phone size={16} />
+                                    <Phone size={14} />
                                     <span>{user?.phoneNumber}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <Button onClick={() => setOpen(true)} className='bg-blue-600 hover:bg-blue-700 text-white'>
+                    <Button onClick={() => setOpen(true)} className='w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white'>
                         Edit Profile
                     </Button>
                 </div>

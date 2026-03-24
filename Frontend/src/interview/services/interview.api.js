@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const BACKEND_URL = import.meta.env.VITE_API_URL || "https://jobhunt-1-fkck.onrender.com"
+
 const api = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: BACKEND_URL,
     withCredentials: true,
 })
 
@@ -14,9 +16,12 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
     formData.append("selfDescription", selfDescription)
     formData.append("resume", resumeFile)
 
+    const token = localStorage.getItem('token')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
     for (let attempt = 0; attempt < retries; attempt++) {
         try {
-            const response = await api.post("/api/v1/interview/", formData)
+            const response = await api.post("/api/v1/interview/", formData, { headers })
             return response.data
         } catch (error) {
             if (error.response?.status === 429 && attempt < retries - 1) {
@@ -35,7 +40,9 @@ export const generateInterviewReport = async ({ jobDescription, selfDescription,
  * @description Service to get interview report by interviewId.
  */
 export const getInterviewReportById = async (interviewId) => {
-    const response = await api.get(`/api/v1/interview/report/${interviewId}`)
+    const token = localStorage.getItem('token')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+    const response = await api.get(`/api/v1/interview/report/${interviewId}`, { headers })
 
     return response.data
 }
@@ -44,7 +51,9 @@ export const getInterviewReportById = async (interviewId) => {
  * @description Service to get all interview reports of logged in user.
  */
 export const getAllInterviewReports = async () => {
-    const response = await api.get("/api/v1/interview/")
+    const token = localStorage.getItem('token')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+    const response = await api.get("/api/v1/interview/", { headers })
 
     return response.data
 }
@@ -53,7 +62,10 @@ export const getAllInterviewReports = async () => {
  * @description Service to generate resume pdf based on user self description, resume content and job description.
  */
 export const generateResumePdf = async ({ interviewReportId }) => {
+    const token = localStorage.getItem('token')
+    const headers = token ? { Authorization: `Bearer ${token}` } : {}
     const response = await api.post(`/api/v1/interview/resume/pdf/${interviewReportId}`, null, {
+        headers,
         responseType: "blob"
     })
 
