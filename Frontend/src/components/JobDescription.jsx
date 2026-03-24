@@ -22,9 +22,22 @@ const JobDescription = () => {
 
     const applyJobHandler = async () => {
         try {
+            if (!user) {
+                toast.error('Please login to apply for jobs');
+                navigate('/login');
+                return;
+            }
+
             const token = localStorage.getItem('token')
+            if (!token) {
+                toast.error('Session expired. Please login again');
+                navigate('/login');
+                return;
+            }
+
+            console.log('Token found:', token.substring(0, 20) + '...')
             const config = {
-                headers: token ? { Authorization: `Bearer ${token}` } : {},
+                headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
             }
             const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {}, config)
