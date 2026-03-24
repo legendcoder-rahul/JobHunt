@@ -82,7 +82,11 @@ const JobDescription = () => {
                     setIsApplied(res.data.job.applications.some(application => application.applicant === user?._id))
                 }
             } catch (error) {
-                console.log(error)
+                console.error('❌ Error fetching job details:', error.response?.data || error.message)
+                if (error.response?.status === 401) {
+                    console.warn('⚠️ Authentication failed while fetching job')
+                    localStorage.removeItem('token');
+                }
             }
         }
         fetchSingleJob()
