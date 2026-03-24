@@ -51,7 +51,7 @@ const register = async (req, res) => {
             }
         }
 
-        await UserModel.create({
+        const newUser = await UserModel.create({
             fullname,
             email,
             phoneNumber,
@@ -62,8 +62,22 @@ const register = async (req, res) => {
             }
         })
 
+        const tokenData = {
+            userId: newUser._id
+        }
+        const jwtToken = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY, { expiresIn: '1d' })
+
         return res.status(201).json({
             message: 'Account created successfully',
+            user: {
+                _id: newUser._id,
+                fullname: newUser.fullname,
+                email: newUser.email,
+                phoneNumber: newUser.phoneNumber,
+                role: newUser.role,
+                profile: newUser.profile
+            },
+            token: jwtToken,
             success: true
         })
     } catch (error) {
@@ -131,6 +145,7 @@ const login = async (req, res) => {
         return res.status(200).cookie('token', token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpsOnly: true, sameSite: 'lax', secure: true }).json({
             message: `Welcome back ${user.fullname}`,
             user,
+            token,
             success: true
         })
 

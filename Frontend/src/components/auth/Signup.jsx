@@ -86,7 +86,7 @@ const Signup = () => {
             
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
-                // localStorage.setItem('token', res.data.token);
+                alStorage.setItem('token', res.data.token);
                 navigate("/");
                 toast.success(res.data.message);
             }

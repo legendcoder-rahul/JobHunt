@@ -34,6 +34,7 @@ const JobDescription = () => {
                 const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user?._id }] }
                 dispatch(setSingleJob(updatedSingleJob))
                 toast.success(res.data.message)
+                
             }
         } catch (error) {
             console.log(error)
@@ -125,24 +126,35 @@ const JobDescription = () => {
                         {/* Core Responsibilities */}
                         <section className='mb-8'>
                             <h2 className='text-2xl font-bold text-gray-900 dark:text-white mb-4 border-l-4 border-blue-600 pl-4'>Core Responsibilities</h2>
-                            <ul className='space-y-3'>
-                                <li className='flex items-start gap-3'>
-                                    <span className='text-blue-600 mt-1'>✓</span>
-                                    <span className='text-gray-700 dark:text-gray-300'>Design and implement scalable backend services using Node.js and GraphQL</span>
-                                </li>
-                                <li className='flex items-start gap-3'>
-                                    <span className='text-blue-600 mt-1'>✓</span>
-                                    <span className='text-gray-700 dark:text-gray-300'>Architect and manage database schemas in PostgreSQL and Redis</span>
-                                </li>
-                                <li className='flex items-start gap-3'>
-                                    <span className='text-blue-600 mt-1'>✓</span>
-                                    <span className='text-gray-700 dark:text-gray-300'>Collaborate with product and design teams on technical requirements</span>
-                                </li>
-                                <li className='flex items-start gap-3'>
-                                    <span className='text-blue-600 mt-1'>✓</span>
-                                    <span className='text-gray-700 dark:text-gray-300'>Optimize performance and ensure high system reliability</span>
-                                </li>
-                            </ul>
+                            {singleJob?.requirements && singleJob.requirements.length > 0 ? (
+                                <ul className='space-y-3'>
+                                    {singleJob.requirements.map((req, index) => (
+                                        <li key={index} className='flex items-start gap-3'>
+                                            <span className='text-blue-600 mt-1'>✓</span>
+                                            <span className='text-gray-700 dark:text-gray-300'>{req}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <div className='space-y-3'>
+                                    <li className='flex items-start gap-3'>
+                                        <span className='text-blue-600 mt-1'>✓</span>
+                                        <span className='text-gray-700 dark:text-gray-300'>Design and implement scalable backend services</span>
+                                    </li>
+                                    <li className='flex items-start gap-3'>
+                                        <span className='text-blue-600 mt-1'>✓</span>
+                                        <span className='text-gray-700 dark:text-gray-300'>Architect and manage database schemas</span>
+                                    </li>
+                                    <li className='flex items-start gap-3'>
+                                        <span className='text-blue-600 mt-1'>✓</span>
+                                        <span className='text-gray-700 dark:text-gray-300'>Collaborate with product and design teams on technical requirements</span>
+                                    </li>
+                                    <li className='flex items-start gap-3'>
+                                        <span className='text-blue-600 mt-1'>✓</span>
+                                        <span className='text-gray-700 dark:text-gray-300'>Optimize performance and ensure high system reliability</span>
+                                    </li>
+                                </div>
+                            )}
                         </section>
 
                         {/* Technical Stack */}
