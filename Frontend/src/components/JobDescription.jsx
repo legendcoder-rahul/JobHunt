@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant'
 import { setSingleJob } from '@/redux/jobSlice'
+import { setUser } from '@/redux/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import { Bookmark, Share2 } from 'lucide-react'
@@ -30,12 +31,14 @@ const JobDescription = () => {
 
             const token = localStorage.getItem('token')
             if (!token) {
+                console.warn('⚠️ No token in localStorage, session may have expired')
                 toast.error('Session expired. Please login again');
+                localStorage.clear();
                 navigate('/login');
                 return;
             }
 
-            console.log('Token found:', token.substring(0, 20) + '...')
+            console.log('📤 Applying for job with token:', token.substring(0, 20) + '...')
             const config = {
                 headers: { Authorization: `Bearer ${token}` },
                 withCredentials: true
@@ -47,11 +50,21 @@ const JobDescription = () => {
                 const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user?._id }] }
                 dispatch(setSingleJob(updatedSingleJob))
                 toast.success(res.data.message)
-                
             }
         } catch (error) {
-            console.log(error)
-            toast.error(error.response?.data?.message || 'Already applied to this job')
+            console.error('❌ Apply job error:', error.response?.data || error.message)
+            
+            // Check if it's an authentication error
+            if (error.response?.status === 401) {
+                console.warn('⚠️ Authentication failed, clearing token and redirecting')
+                localStorage.clear();
+                dispatch(setUser(null));
+                toast.error('Session expired. Please login again');
+                navigate('/login');
+                return;
+            }
+            
+            toast.error(error.response?.data?.message || 'Failed to apply for job')
         }
     }
 

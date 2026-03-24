@@ -23,16 +23,31 @@ const Navbar = () => {
 
     const logoutHandler = async () => {
         try {
+            console.log('🔓 Attempting logout...')
             const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
+            console.log('Logout response:', res.data)
             if (res.data.success) {
+                // Clear everything
                 dispatch(setUser(null));
                 localStorage.removeItem('token');
-                navigate("/");
+                setIsMobileMenuOpen(false);
                 toast.success(res.data.message);
+                // Navigate after a short delay to ensure state updates
+                setTimeout(() => {
+                    navigate("/");
+                }, 100);
             }
         } catch (error) {
-            console.log(error);
+            console.error('❌ Logout error:', error);
+            // Even if logout API fails, clear frontend state
+            dispatch(setUser(null));
+            localStorage.removeItem('token');
+            setIsMobileMenuOpen(false);
             toast.error(error.response?.data?.message || 'Logout failed');
+            // Still redirect home
+            setTimeout(() => {
+                navigate("/");
+            }, 100);
         }
     }
     return (
