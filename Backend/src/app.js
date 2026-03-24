@@ -13,7 +13,7 @@ const app = express()
 
 // CORS Configuration
 const corsOptions = {
-    origin: 'https://job-hunt-seven-weld.vercel.app/',
+    origin: 'https://job-hunt-seven-weld.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
