@@ -22,7 +22,12 @@ const JobDescription = () => {
 
     const applyJobHandler = async () => {
         try {
-            const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {}, { withCredentials: true })
+            const token = localStorage.getItem('token')
+            const config = {
+                headers: token ? { Authorization: `Bearer ${token}` } : {},
+                withCredentials: true
+            }
+            const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${jobId}`, {}, config)
 
             if (res.data.success) {
                 setIsApplied(true)
@@ -39,7 +44,12 @@ const JobDescription = () => {
     useEffect(() => {
         const fetchSingleJob = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, { withCredentials: true })
+                const token = localStorage.getItem('token')
+                const config = {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
+                    withCredentials: true
+                }
+                const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, config)
                 if (res.data.success) {
                     dispatch(setSingleJob(res.data.job))
                     setIsApplied(res.data.job.applications.some(application => application.applicant === user?._id))
@@ -77,7 +87,7 @@ const JobDescription = () => {
                     <Button
                         onClick={isApplied ? null : applyJobHandler}
                         disabled={isApplied}
-                        className={`px-8 py-2 rounded-lg font-semibold ${isApplied ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+                        className={`w-full md:w-auto px-8 py-2 rounded-lg font-semibold ${isApplied ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
                     >
                         {isApplied ? 'Applied' : 'Apply Now'}
                     </Button>
@@ -87,22 +97,22 @@ const JobDescription = () => {
                     {/* Left Content */}
                     <div className='lg:col-span-2'>
                         {/* Quick Info */}
-                        <div className='grid grid-cols-4 gap-4 mb-8'>
+                        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
                             <div className='bg-gray-50 dark:bg-gray-900 p-4 rounded-lg'>
                                 <p className='text-xs text-gray-600 dark:text-gray-400 mb-1'>SALARY RANGE</p>
-                                <p className='font-bold text-gray-900 dark:text-white'>₹{singleJob?.salary}L - ₹{singleJob?.salary + 20}L</p>
+                                <p className='font-bold text-gray-900 dark:text-white text-sm'>₹{singleJob?.salary}L - ₹{singleJob?.salary + 20}L</p>
                             </div>
                             <div className='bg-gray-50 dark:bg-gray-900 p-4 rounded-lg'>
                                 <p className='text-xs text-gray-600 dark:text-gray-400 mb-1'>EXPERIENCE</p>
-                                <p className='font-bold text-gray-900 dark:text-white'>{singleJob?.experience}+ Years</p>
+                                <p className='font-bold text-gray-900 dark:text-white text-sm'>{singleJob?.experience}+ Years</p>
                             </div>
                             <div className='bg-gray-50 dark:bg-gray-900 p-4 rounded-lg'>
                                 <p className='text-xs text-gray-600 dark:text-gray-400 mb-1'>JOB TYPE</p>
-                                <p className='font-bold text-gray-900 dark:text-white'>{singleJob?.jobType}</p>
+                                <p className='font-bold text-gray-900 dark:text-white text-sm'>{singleJob?.jobType}</p>
                             </div>
                             <div className='bg-gray-50 dark:bg-gray-900 p-4 rounded-lg'>
                                 <p className='text-xs text-gray-600 dark:text-gray-400 mb-1'>APPLICANTS</p>
-                                <p className='font-bold text-gray-900 dark:text-white'>{singleJob?.applications?.length || 0}</p>
+                                <p className='font-bold text-gray-900 dark:text-white text-sm'>{singleJob?.applications?.length || 0}</p>
                             </div>
                         </div>
 
